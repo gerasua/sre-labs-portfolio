@@ -1,0 +1,24 @@
+total 4
+-rw-rw-r-- 1 gerardo gerardo   0 oct 22 14:56 cleanup.log
+-rwxrwxr-x 1 gerardo gerardo 701 oct 22 14:56 cleanup.sh
+===== jue 22 oct 2026 14:56:20 CST · cleanup.sh =====
+--- deleting namespace lab01
+namespace "lab01" deleted
+--- removing temporary files
+removed '/tmp/storefront-conf.backup.yaml'
+removed '/tmp/default.conf'
+removed '/tmp/default.conf.orig'
+--- verifying
+PASS  namespace lab01 is gone
+NAMESPACE     NAME                               READY   STATUS    RESTARTS      AGE
+kube-system   coredns-7d764666f9-fzbbf           1/1     Running   1 (17h ago)   19h
+kube-system   etcd-minikube                      1/1     Running   1 (17h ago)   19h
+kube-system   kube-apiserver-minikube            1/1     Running   1 (17h ago)   19h
+kube-system   kube-controller-manager-minikube   1/1     Running   1 (17h ago)   19h
+kube-system   kube-proxy-26fg4                   1/1     Running   1 (17h ago)   19h
+kube-system   kube-scheduler-minikube            1/1     Running   1 (17h ago)   19h
+kube-system   storage-provisioner                1/1     Running   2 (74m ago)   19h
+exit code: 0
+* Stopping node "minikube"  ...
+* Powering off "minikube" via SSH ...
+* 1 node stopped.

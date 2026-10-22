@@ -1,0 +1,28 @@
+total 4
+-rw-rw-r-- 1 gerardo gerardo    0 oct 22 14:52 verify.log
+-rwxrwxr-x 1 gerardo gerardo 1923 oct 22 14:52 verify.sh
+===== jue 22 oct 2026 14:52:30 CST · verify.sh =====
+PASS  rollout completed
+PASS  2 replicas ready (got: 2)
+PASS  0 container restarts (got: 0)
+PASS  service has 2 ready endpoints (got: 2)
+PASS  nginx -t passes inside the pod
+PASS  GET /healthz returns 'ok' (got: okpod "verify-body" )
+PASS  GET / returns HTTP 200
+-----
+ALL CHECKS PASSED
+exit code: 0
+--- final state
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/storefront   2/2     2            2           68m
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/storefront-679c564b7f   0         0         0       68m
+replicaset.apps/storefront-7c996d5565   2         2         2       10m
+
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/storefront-7c996d5565-2pxnl   1/1     Running   0          10m
+pod/storefront-7c996d5565-rljmk   1/1     Running   0          10m
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/storefront   ClusterIP   10.111.195.69   <none>        80/TCP    68m
