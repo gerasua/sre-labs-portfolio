@@ -1,0 +1,24 @@
+# Secrets / Secretos
+.env
+.env.*
+*.pem
+*.key
+*.token
+secrets/
+credentials*
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+# Kubernetes
+kubeconfig*
+*.kubeconfig
+.kube/
+# Logs that may contain credentials / Logs con posibles credenciales
+*.secret.log
+*.private.log
+# Misc
+.DS_Store
+*.swp
