@@ -23,6 +23,8 @@ Una app web está desplegada en el namespace `shop` y sus pods están sanos, per
 | `99-cleanup/` | `cleanup.sh` (elimina el namespace) y su log. |
 | `POSTMORTEM.md` | Postmortem en español e inglés. |
 
+> **Ticket y bitácora:** el ticket del incidente está en [`01-break/TICKET.md`](01-break/TICKET.md) y el helper `lablog`, que registra cada comando con su salida, está en [`00-setup/lablog.sh`](00-setup/lablog.sh).
+
 ### Cómo reproducirlo
 Requiere Minikube corriendo y `kubectl` apuntando a él.
 ```bash
@@ -57,6 +59,8 @@ A web app is deployed in namespace `shop` and its pods are healthy, but nothing 
 | `04-verify/` | `verify.sh` (7 checks with an exit code) and its log. |
 | `99-cleanup/` | `cleanup.sh` (deletes the namespace) and its log. |
 | `POSTMORTEM.md` | Postmortem in Spanish and English. |
+
+> **Ticket and logging helper:** the incident ticket is in [`01-break/TICKET.md`](01-break/TICKET.md) and the `lablog` helper, which records each command with its output, is in [`00-setup/lablog.sh`](00-setup/lablog.sh).
 
 ### How to reproduce
 Requires a running Minikube and `kubectl` pointing at it.
