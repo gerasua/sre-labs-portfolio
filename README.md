@@ -7,6 +7,7 @@ Ejercicios prácticos de troubleshooting y automatización SRE con fallas simula
 | # | Ejercicio | Tema | Estado |
 |---|-----------|------|--------|
 | 01 | [Pod that won't start](01-pod-wont-start/) | Kubernetes: `CrashLoopBackOff` por un error de configuración en un ConfigMap | ✅ Completado |
+| 02 | [Service with no endpoints](02-service-no-endpoints/) | Kubernetes: Service sin endpoints porque su selector no coincide con las etiquetas de los pods | ✅ Completado |
 
 ### Cómo está organizado cada laboratorio
 Todos siguen la misma estructura, para que se puedan reproducir y revisar de la misma forma:
@@ -26,15 +27,16 @@ Todos siguen la misma estructura, para que se puedan reproducir y revisar de la 
 | Diagnóstico de `CrashLoopBackOff` (estado, logs, código de salida) | 01 |
 | Gestión de ConfigMaps y rollouts en Kubernetes | 01 |
 | Validación de configuración antes de desplegar (`nginx -t`) | 01 |
-| Scripts Bash seguros (guardia de contexto, idempotencia, códigos de salida) | 01 |
-| Verificación de punta a punta y redacción de postmortems | 01 |
+| Scripts Bash seguros (guardia de contexto, idempotencia, códigos de salida) | 01, 02 |
+| Verificación de punta a punta y redacción de postmortems | 01, 02 |
+| Diagnóstico de Services sin endpoints (selector vs. etiquetas de pods) | 02 |
+| Pruebas de conectividad desde dentro del clúster con un pod temporal | 02 |
 
 ### Roadmap
 Ejercicios planeados; el orden puede cambiar.
 
 | # | Ejercicio | Enfoque |
 |---|-----------|---------|
-| 02 | Service with no endpoints | Kubernetes: Services y selectores |
 | 03 | Pods stuck in Pending | Kubernetes: recursos y cuotas |
 | 04 | Intermittent restarts | Kubernetes: límites de memoria y sondas de salud |
 | 05 | GitOps drift | ArgoCD: aplicación `OutOfSync` |
@@ -51,6 +53,7 @@ Hands-on SRE troubleshooting and automation exercises with simulated failures, 1
 | # | Exercise | Topic | Status |
 |---|----------|-------|--------|
 | 01 | [Pod that won't start](01-pod-wont-start/) | Kubernetes: `CrashLoopBackOff` caused by a configuration error in a ConfigMap | ✅ Completed |
+| 02 | [Service with no endpoints](02-service-no-endpoints/) | Kubernetes: Service with no endpoints because its selector doesn't match the pods' labels | ✅ Completed |
 
 ### How each lab is organized
 All labs follow the same structure, so they can be reproduced and reviewed the same way:
@@ -70,15 +73,16 @@ All labs follow the same structure, so they can be reproduced and reviewed the s
 | `CrashLoopBackOff` diagnosis (state, logs, exit code) | 01 |
 | ConfigMap and rollout management in Kubernetes | 01 |
 | Configuration validation before deploying (`nginx -t`) | 01 |
-| Safe Bash scripting (context guard, idempotency, exit codes) | 01 |
-| End-to-end verification and postmortem writing | 01 |
+| Safe Bash scripting (context guard, idempotency, exit codes) | 01, 02 |
+| End-to-end verification and postmortem writing | 01, 02 |
+| Diagnosing Services with no endpoints (selector vs. pod labels) | 02 |
+| In-cluster connectivity tests with a temporary pod | 02 |
 
 ### Roadmap
 Planned exercises; the order may change.
 
 | # | Exercise | Focus |
 |---|----------|-------|
-| 02 | Service with no endpoints | Kubernetes: Services and selectors |
 | 03 | Pods stuck in Pending | Kubernetes: resources and quotas |
 | 04 | Intermittent restarts | Kubernetes: memory limits and health probes |
 | 05 | GitOps drift | ArgoCD: `OutOfSync` application |
