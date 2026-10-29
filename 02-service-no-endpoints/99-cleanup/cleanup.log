@@ -1,0 +1,19 @@
+[2026-10-29 14:03:52] $ ~/labs/sre-labs-portfolio/02-service-no-endpoints/99-cleanup/cleanup.sh; echo "exit code: $?"
+Deleting namespace shop (Deployment, Service and pods go with it)...
+namespace "shop" deleted
+OK: namespace shop is gone.
+exit code: 0
+
+[2026-10-29 14:04:03] $ kubectl get ns; kubectl get pods -A | grep -v kube-system || true
+NAME              STATUS   AGE
+default           Active   7d19h
+kube-node-lease   Active   7d19h
+kube-public       Active   7d19h
+kube-system       Active   7d19h
+NAMESPACE     NAME                               READY   STATUS    RESTARTS      AGE
+
+[2026-10-29 14:04:34] $ minikube stop
+* Stopping node "minikube"  ...
+* Powering off "minikube" via SSH ...
+* 1 node stopped.
+

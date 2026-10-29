@@ -1,0 +1,37 @@
+
+[2026-10-29 13:25:20] $ ls -l ~/labs/sre-labs-portfolio/02-service-no-endpoints/01-break/
+total 8
+-rw-rw-r-- 1 gerardo gerardo   91 oct 29 13:25 break.log
+-rwxrwxr-x 1 gerardo gerardo 1570 oct 29 13:25 break.sh
+
+[2026-10-29 13:25:45] $ ~/labs/sre-labs-portfolio/02-service-no-endpoints/01-break/break.sh
+namespace/shop created
+deployment.apps/web created
+service/web created
+Waiting for deployment "web" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "web" rollout to finish: 1 of 2 updated replicas are available...
+deployment "web" successfully rolled out
+
+==================== INCIDENT TICKET ====================
+Reported by : storefront team
+Namespace   : shop
+Symptom     : the "web" app is deployed and its pods look fine,
+              but nothing answers at http://web (port 80)
+              from inside the cluster.
+Your task   : find out why traffic does not arrive and fix it.
+==========================================================
+
+[2026-10-29 13:26:42] $ ~/labs/sre-labs-portfolio/02-service-no-endpoints/01-break/break.sh
+namespace/shop unchanged
+deployment.apps/web unchanged
+service/web unchanged
+deployment "web" successfully rolled out
+
+==================== INCIDENT TICKET ====================
+Reported by : storefront team
+Namespace   : shop
+Symptom     : the "web" app is deployed and its pods look fine,
+              but nothing answers at http://web (port 80)
+              from inside the cluster.
+Your task   : find out why traffic does not arrive and fix it.
+==========================================================

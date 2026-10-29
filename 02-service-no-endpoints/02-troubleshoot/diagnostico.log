@@ -1,0 +1,40 @@
+
+[2026-10-29 13:44:02] $ kubectl get endpoints web -n shop
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME   ENDPOINTS   AGE
+web    <none>      18m
+
+[2026-10-29 13:44:02] $ kubectl get svc web -n shop -o wide
+NAME   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+web    ClusterIP   10.103.163.150   <none>        80/TCP    18m   app=web-app
+
+[2026-10-29 13:44:02] $ kubectl get pods -n shop --show-labels
+NAME                   READY   STATUS    RESTARTS   AGE   LABELS
+web-6bf69cb786-c6d4c   1/1     Running   0          18m   app=web,pod-template-hash=6bf69cb786
+web-6bf69cb786-gvxb4   1/1     Running   0          18m   app=web,pod-template-hash=6bf69cb786
+
+[2026-10-29 13:51:35] $ kubectl run probe -n shop --rm -i --restart=Never --image=busybox:1.36 -- wget -qO- -T 3 http://web
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+wget: can't connect to remote host (10.103.163.150): Connection refused
+pod "probe" deleted from shop namespace
+pod shop/probe terminated (Error)
+
+[2026-10-29 13:56:15] $ kubectl get svc web -n shop -o yaml > ~/labs/sre-labs-portfolio/02-service-no-endpoints/02-troubleshoot/svc-web-before.yaml && grep -n -A1 "selector:" ~/labs/sre-labs-portfolio/02-service-no-endpoints/02-troubleshoot/svc-web-before.yaml
+25:  selector:
+26-    app: web-app
+
+[2026-10-29 13:58:21] $ kubectl set selector svc web -n shop app=web
+service/web selector updated
+
+[2026-10-29 13:58:39] $ kubectl get endpoints web -n shop
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME   ENDPOINTS                       AGE
+web    10.244.0.13:80,10.244.0.14:80   32m
+
+[2026-10-29 13:58:39] $ kubectl get svc web -n shop -o wide
+NAME   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+web    ClusterIP   10.103.163.150   <none>        80/TCP    32m   app=web
+
+[2026-10-29 13:58:39] $ kubectl run probe -n shop --rm -i --restart=Never --image=busybox:1.36 -- wget -qO- -T 3 http://web | grep -o "<title>.*</title>"
+<title>Welcome to nginx!</title>

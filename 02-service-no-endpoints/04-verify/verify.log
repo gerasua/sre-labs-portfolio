@@ -1,0 +1,17 @@
+
+[2026-10-29 14:01:37] $ ls -l ~/labs/sre-labs-portfolio/02-service-no-endpoints/02-troubleshoot/
+total 8
+-rw-rw-r-- 1 gerardo gerardo 2234 oct 29 13:58 diagnostico.log
+-rw-rw-r-- 1 gerardo gerardo  794 oct 29 13:56 svc-web-before.yaml
+
+[2026-10-29 14:01:37] $ ~/labs/sre-labs-portfolio/02-service-no-endpoints/04-verify/verify.sh; echo "exit code: $?"
+[PASS] kubectl context is minikube
+[PASS] namespace shop exists
+[PASS] deployment web has 2/2 replicas ready
+[PASS] service selector matches the pod template label
+[PASS] service has exactly 2 endpoints
+[PASS] endpoints are exactly the pod IPs
+[PASS] HTTP request to http://web returns the app
+
+Result: 7 passed, 0 failed
+exit code: 0

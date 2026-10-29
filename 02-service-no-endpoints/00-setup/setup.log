@@ -1,0 +1,116 @@
+# Commands run before per-command logging was in place.
+# Their raw output follows, in the same order.
+$ git status -sb; git log --oneline -n 5; ls -1
+$ nproc; free -h; df -h /; docker ps --format 'table {{.Names}}\t{{.Status}}'
+$ minikube status
+$ minikube start; kubectl config current-context; kubectl get nodes -o wide; kubectl get pods -A
+$ kubectl wait --for=condition=Ready pods --all -n kube-system --timeout=180s; kubectl get pods -n kube-system
+$ docker ps -a; minikube start; kubectl config current-context; kubectl wait ... --timeout=240s; ls -l 01-break/; kubectl get ns shop
+# ---- raw output ----
+## main...origin/main
+?? 02-service-no-endpoints/
+---
+2dba4e6 docs: add lab structure and roadmap to root README
+e4cd213 docs: add exercise index and skills table to root README
+87c6447 feat: add exercise 01 - pod that won't start (CrashLoopBackOff from ConfigMap syntax error)
+e1e9e84 chore: initialize repository with MIT license and gitignore
+---
+01-pod-wont-start
+02-service-no-endpoints
+LICENSE
+README.md
+4
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       1.9Gi        11Gi       152Mi       2.6Gi        13Gi
+Swap:          1.9Gi          0B       1.9Gi
+Filesystem                Size  Used Avail Use% Mounted on
+/dev/mapper/vgzorin-root  467G  166G  277G  38% /
+--- docker ---
+NAMES     STATUS
+minikube
+type: Control Plane
+host: Stopped
+kubelet: Stopped
+apiserver: Stopped
+kubeconfig: Stopped
+
+* minikube v1.38.1 on Debian trixie/sid
+* Using the docker driver based on existing profile
+* minikube 1.39.0 is available! Download it: https://github.com/kubernetes/minikube/releases/tag/v1.39.0
+* Starting "minikube" primary control-plane node in "minikube" cluster
+* To disable this notice, run: 'minikube config set WantUpdateNotification false'
+
+* Pulling base image v0.0.50 ...
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+
+! /usr/local/bin/kubectl is version 1.37.0, which may have incompatibilities with Kubernetes 1.35.1.
+  - Want kubectl v1.35.1? Try 'minikube kubectl -- get pods -A'
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+--- contexto ---
+minikube
+--- nodos ---
+NAME       STATUS   ROLES           AGE     VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION     CONTAINER-RUNTIME
+minikube   Ready    control-plane   5d18h   v1.35.1   192.168.49.2   <none>        Debian GNU/Linux 12 (bookworm)   7.0.0-38-generic   docker://29.2.1
+--- pods del sistema ---
+NAMESPACE     NAME                               READY   STATUS    RESTARTS        AGE
+kube-system   coredns-7d764666f9-fzbbf           0/1     Running   2 (4d22h ago)   5d18h
+kube-system   etcd-minikube                      0/1     Running   2 (4d22h ago)   5d18h
+kube-system   kube-apiserver-minikube            0/1     Running   2 (4d22h ago)   5d18h
+kube-system   kube-controller-manager-minikube   0/1     Running   2 (4d22h ago)   5d18h
+kube-system   kube-proxy-26fg4                   1/1     Running   2 (4d22h ago)   5d18h
+kube-system   kube-scheduler-minikube            0/1     Running   2 (4d22h ago)   5d18h
+kube-system   storage-provisioner                1/1     Running   3 (4d22h ago)   5d18h
+pod/coredns-7d764666f9-fzbbf condition met
+pod/etcd-minikube condition met
+pod/kube-apiserver-minikube condition met
+pod/kube-controller-manager-minikube condition met
+pod/kube-proxy-26fg4 condition met
+pod/kube-scheduler-minikube condition met
+pod/storage-provisioner condition met
+--- pods ---
+NAME                               READY   STATUS    RESTARTS        AGE
+coredns-7d764666f9-fzbbf           1/1     Running   2 (4d23h ago)   5d19h
+etcd-minikube                      1/1     Running   2 (4d23h ago)   5d19h
+kube-apiserver-minikube            1/1     Running   2 (4d23h ago)   5d19h
+kube-controller-manager-minikube   1/1     Running   2 (4d23h ago)   5d19h
+kube-proxy-26fg4                   1/1     Running   2 (4d23h ago)   5d19h
+kube-scheduler-minikube            1/1     Running   2 (4d23h ago)   5d19h
+storage-provisioner                1/1     Running   4 (52m ago)     5d19h
+NAMES      STATUS
+minikube   Exited (137) 39 hours ago
+atlantis   Exited (0) 4 weeks ago
+gitea      Exited (0) 4 weeks ago
+--- start ---
+* minikube v1.38.1 on Debian trixie/sid
+* Using the docker driver based on existing profile
+* Starting "minikube" primary control-plane node in "minikube" cluster
+* Pulling base image v0.0.50 ...
+* minikube 1.39.0 is available! Download it: https://github.com/kubernetes/minikube/releases/tag/v1.39.0
+* To disable this notice, run: 'minikube config set WantUpdateNotification false'
+
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: storage-provisioner, default-storageclass
+
+! /usr/local/bin/kubectl is version 1.37.0, which may have incompatibilities with Kubernetes 1.35.1.
+  - Want kubectl v1.35.1? Try 'minikube kubectl -- get pods -A'
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+--- contexto ---
+minikube
+--- wait ---
+pod/coredns-7d764666f9-fzbbf condition met
+pod/etcd-minikube condition met
+pod/kube-apiserver-minikube condition met
+pod/kube-controller-manager-minikube condition met
+pod/kube-proxy-26fg4 condition met
+pod/kube-scheduler-minikube condition met
+pod/storage-provisioner condition met
+--- break.sh ---
+total 0
+--- namespace shop ---
+Error from server (NotFound): namespaces "shop" not found
+
+[2026-10-29 13:21:45] $ kubectl config current-context
+minikube
