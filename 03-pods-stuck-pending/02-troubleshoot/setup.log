@@ -1,0 +1,135 @@
+
+$ uptime -p; who -b
+# 2026-11-05 20:11:19
+up 43 minutes
+         system boot  2026-11-05 19:27
+
+$ nproc; free -h | head -2; df -h / | tail -1
+# 2026-11-05 20:11:19
+4
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       2.0Gi        11Gi       144Mi       2.2Gi        13Gi
+/dev/mapper/vgzorin-root  467G  167G  276G  38% /
+
+$ systemctl is-active docker; cat /etc/docker/daemon.json
+# 2026-11-05 20:11:19
+active
+{
+  "dns": ["8.8.8.8", "192.168.0.1"],
+  "ipv6": false
+}
+
+$ docker ps -a --format "table {{.Names}}\t{{.Status}}"
+# 2026-11-05 20:11:19
+NAMES      STATUS
+minikube   Exited (130) 7 days ago
+atlantis   Exited (0) 5 weeks ago
+gitea      Exited (0) 5 weeks ago
+
+$ minikube status
+# 2026-11-05 20:11:19
+minikube
+type: Control Plane
+host: Stopped
+kubelet: Stopped
+apiserver: Stopped
+kubeconfig: Stopped
+
+
+$ minikube start
+# 2026-11-05 20:12:44
+* minikube v1.38.1 on Debian trixie/sid
+* Using the docker driver based on existing profile
+* Starting "minikube" primary control-plane node in "minikube" cluster
+* Pulling base image v0.0.50 ...
+* minikube 1.39.0 is available! Download it: https://github.com/kubernetes/minikube/releases/tag/v1.39.0
+* To disable this notice, run: 'minikube config set WantUpdateNotification false'
+
+* Verifying Kubernetes components...
+  - Using image gcr.io/k8s-minikube/storage-provisioner:v5
+* Enabled addons: default-storageclass, storage-provisioner
+
+! /usr/local/bin/kubectl is version 1.37.0, which may have incompatibilities with Kubernetes 1.35.1.
+  - Want kubectl v1.35.1? Try 'minikube kubectl -- get pods -A'
+* Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+$ minikube status
+# 2026-11-05 20:13:11
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+
+
+$ kubectl config current-context
+# 2026-11-05 20:13:11
+minikube
+
+$ kubectl get nodes -o wide
+# 2026-11-05 20:13:11
+NAME       STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION     CONTAINER-RUNTIME
+minikube   Ready    control-plane   15d   v1.35.1   192.168.49.2   <none>        Debian GNU/Linux 12 (bookworm)   7.0.0-42-generic   docker://29.2.1
+
+$ kubectl get pods -A
+# 2026-11-05 20:13:11
+NAMESPACE     NAME                               READY   STATUS    RESTARTS       AGE
+kube-system   coredns-7d764666f9-fzbbf           0/1     Running   4 (7d6h ago)   15d
+kube-system   etcd-minikube                      0/1     Running   4 (7d6h ago)   15d
+kube-system   kube-apiserver-minikube            0/1     Running   4 (7d6h ago)   15d
+kube-system   kube-controller-manager-minikube   0/1     Running   4 (7d6h ago)   15d
+kube-system   kube-proxy-26fg4                   1/1     Running   4 (7d6h ago)   15d
+kube-system   kube-scheduler-minikube            0/1     Running   4 (7d6h ago)   15d
+kube-system   storage-provisioner                1/1     Running   7 (7d6h ago)   15d
+
+$ kubectl get ns
+# 2026-11-05 20:13:12
+NAME              STATUS   AGE
+default           Active   15d
+kube-node-lease   Active   15d
+kube-public       Active   15d
+kube-system       Active   15d
+
+$ kubectl describe node minikube | grep -A7 -E "^Capacity|^Allocatable"
+# 2026-11-05 20:13:12
+Capacity:
+  cpu:                4
+  ephemeral-storage:  488640560Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             16275372Ki
+  pods:               110
+Allocatable:
+  cpu:                4
+  ephemeral-storage:  488640560Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             16275372Ki
+  pods:               110
+System Info:
+
+$ kubectl wait --for=condition=Ready pod --all -n kube-system --timeout=180s
+# 2026-11-05 20:15:17
+pod/coredns-7d764666f9-fzbbf condition met
+pod/etcd-minikube condition met
+pod/kube-apiserver-minikube condition met
+pod/kube-controller-manager-minikube condition met
+pod/kube-proxy-26fg4 condition met
+pod/kube-scheduler-minikube condition met
+pod/storage-provisioner condition met
+
+$ kubectl get pods -A
+# 2026-11-05 20:15:18
+NAMESPACE     NAME                               READY   STATUS    RESTARTS       AGE
+kube-system   coredns-7d764666f9-fzbbf           1/1     Running   4 (7d6h ago)   15d
+kube-system   etcd-minikube                      1/1     Running   4 (7d6h ago)   15d
+kube-system   kube-apiserver-minikube            1/1     Running   4 (7d6h ago)   15d
+kube-system   kube-controller-manager-minikube   1/1     Running   4 (7d6h ago)   15d
+kube-system   kube-proxy-26fg4                   1/1     Running   4 (7d6h ago)   15d
+kube-system   kube-scheduler-minikube            1/1     Running   4 (7d6h ago)   15d
+kube-system   storage-provisioner                1/1     Running   8 (98s ago)    15d
+
+$ docker inspect minikube --format "NanoCpus={{.HostConfig.NanoCpus}} Memory={{.HostConfig.Memory}}"
+# 2026-11-05 20:15:18
+NanoCpus=0 Memory=4294967296

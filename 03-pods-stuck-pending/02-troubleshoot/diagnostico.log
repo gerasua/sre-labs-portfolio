@@ -1,0 +1,222 @@
+
+$ kubectl get deploy,rs,pods -n lab03 -o wide
+# 2026-11-05 20:24:25
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES              SELECTOR
+deployment.apps/checkout-api   2/3     3            2           5m56s   api          nginx:1.27-alpine   app=checkout-api
+
+NAME                                      DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES              SELECTOR
+replicaset.apps/checkout-api-55b477bfcc   3         3         2       5m56s   api          nginx:1.27-alpine   app=checkout-api,pod-template-hash=55b477bfcc
+
+NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+pod/checkout-api-55b477bfcc-72g5q   1/1     Running   0          5m56s   10.244.0.19   minikube   <none>           <none>
+pod/checkout-api-55b477bfcc-7x6jd   1/1     Running   0          5m56s   10.244.0.20   minikube   <none>           <none>
+pod/checkout-api-55b477bfcc-jgvh4   0/1     Pending   0          5m56s   <none>        <none>     <none>           <none>
+
+$ kubectl describe pod -n lab03 -l app=checkout-api | grep -A12 -E "^Name:|^Status:|^Events:"
+# 2026-11-05 20:25:16
+Name:             checkout-api-55b477bfcc-72g5q
+Namespace:        lab03
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 05 Nov 2026 20:18:29 -0600
+Labels:           app=checkout-api
+                  pod-template-hash=55b477bfcc
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.19
+IPs:
+  IP:           10.244.0.19
+Controlled By:  ReplicaSet/checkout-api-55b477bfcc
+Containers:
+  api:
+    Container ID:   docker://77799299fcdd9196c0cf2d0f86c337416d6298bd847d57badcb251e6dce263a4
+    Image:          nginx:1.27-alpine
+    Image ID:       docker-pullable://nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+--
+Name:             checkout-api-55b477bfcc-7x6jd
+Namespace:        lab03
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Thu, 05 Nov 2026 20:18:29 -0600
+Labels:           app=checkout-api
+                  pod-template-hash=55b477bfcc
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.20
+IPs:
+  IP:           10.244.0.20
+Controlled By:  ReplicaSet/checkout-api-55b477bfcc
+Containers:
+  api:
+    Container ID:   docker://62df19ae82c782566db339fb997755990fc707dc15a9fda9ca1bc896b8ada394
+    Image:          nginx:1.27-alpine
+    Image ID:       docker-pullable://nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+--
+Name:             checkout-api-55b477bfcc-jgvh4
+Namespace:        lab03
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           app=checkout-api
+                  pod-template-hash=55b477bfcc
+Annotations:      <none>
+Status:           Pending
+IP:               
+IPs:              <none>
+Controlled By:    ReplicaSet/checkout-api-55b477bfcc
+Containers:
+  api:
+    Image:      nginx:1.27-alpine
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     1500m
+      memory:  256Mi
+    Requests:
+
+$ kubectl get deploy,rs,pods -n lab03 -o wide
+# 2026-11-05 20:31:44
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES              SELECTOR
+deployment.apps/checkout-api   2/3     3            2           13m   api          nginx:1.27-alpine   app=checkout-api
+
+NAME                                      DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES              SELECTOR
+replicaset.apps/checkout-api-55b477bfcc   3         3         2       13m   api          nginx:1.27-alpine   app=checkout-api,pod-template-hash=55b477bfcc
+
+NAME                                READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+pod/checkout-api-55b477bfcc-72g5q   1/1     Running   0          13m   10.244.0.19   minikube   <none>           <none>
+pod/checkout-api-55b477bfcc-7x6jd   1/1     Running   0          13m   10.244.0.20   minikube   <none>           <none>
+pod/checkout-api-55b477bfcc-jgvh4   0/1     Pending   0          13m   <none>        <none>     <none>           <none>
+
+$ kubectl describe pod checkout-api-55b477bfcc-jgvh4 -n lab03 | sed -n "/^Events:/,\$p"
+# 2026-11-05 20:31:44
+Events:
+  Type     Reason            Age                  From               Message
+  ----     ------            ----                 ----               -------
+  Warning  FailedScheduling  13m                  default-scheduler  0/1 nodes are available: 1 Insufficient cpu. no new claims to deallocate, preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.
+  Warning  FailedScheduling  3m4s (x2 over 8m4s)  default-scheduler  0/1 nodes are available: 1 Insufficient cpu. no new claims to deallocate, preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.
+
+$ kubectl describe node minikube | sed -n "/^Allocated resources:/,/^Events:/p"
+# 2026-11-05 20:34:34
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                3750m (93%)  3 (75%)
+  memory             426Mi (2%)   682Mi (4%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:
+
+$ kubectl get pods -A -o "custom-columns=NS:.metadata.namespace,POD:.metadata.name,CPU_REQ:.spec.containers[*].resources.requests.cpu,CPU_LIM:.spec.containers[*].resources.limits.cpu"
+# 2026-11-05 20:34:34
+NS            POD                                CPU_REQ   CPU_LIM
+kube-system   coredns-7d764666f9-fzbbf           100m      <none>
+kube-system   etcd-minikube                      100m      <none>
+kube-system   kube-apiserver-minikube            250m      <none>
+kube-system   kube-controller-manager-minikube   200m      <none>
+kube-system   kube-proxy-26fg4                   <none>    <none>
+kube-system   kube-scheduler-minikube            100m      <none>
+kube-system   storage-provisioner                <none>    <none>
+lab03         checkout-api-55b477bfcc-72g5q      1500m     1500m
+lab03         checkout-api-55b477bfcc-7x6jd      1500m     1500m
+lab03         checkout-api-55b477bfcc-jgvh4      1500m     1500m
+
+$ docker stats --no-stream minikube
+# 2026-11-05 20:34:34
+CONTAINER ID   NAME       CPU %     MEM USAGE / LIMIT   MEM %     NET I/O         BLOCK I/O         PIDS
+94706183b463   minikube   31.35%    1.315GiB / 4GiB     32.87%    385kB / 829kB   1.72GB / 86.5MB   351
+
+$ kubectl describe node minikube | sed -n "/^Allocated resources:/,/^Events:/p"
+# 2026-11-05 20:40:25
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                3750m (93%)  3 (75%)
+  memory             426Mi (2%)   682Mi (4%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:
+
+$ kubectl get pods -A -o "custom-columns=NS:.metadata.namespace,POD:.metadata.name,CPU_REQ:.spec.containers[*].resources.requests.cpu,CPU_LIM:.spec.containers[*].resources.limits.cpu"
+# 2026-11-05 20:40:25
+NS            POD                                CPU_REQ   CPU_LIM
+kube-system   coredns-7d764666f9-fzbbf           100m      <none>
+kube-system   etcd-minikube                      100m      <none>
+kube-system   kube-apiserver-minikube            250m      <none>
+kube-system   kube-controller-manager-minikube   200m      <none>
+kube-system   kube-proxy-26fg4                   <none>    <none>
+kube-system   kube-scheduler-minikube            100m      <none>
+kube-system   storage-provisioner                <none>    <none>
+lab03         checkout-api-55b477bfcc-72g5q      1500m     1500m
+lab03         checkout-api-55b477bfcc-7x6jd      1500m     1500m
+lab03         checkout-api-55b477bfcc-jgvh4      1500m     1500m
+
+$ docker stats --no-stream minikube
+# 2026-11-05 20:40:25
+CONTAINER ID   NAME       CPU %     MEM USAGE / LIMIT   MEM %     NET I/O         BLOCK I/O        PIDS
+94706183b463   minikube   30.79%    1.317GiB / 4GiB     32.92%    397kB / 972kB   1.72GB / 103MB   352
+
+$ kubectl get deploy checkout-api -n lab03 -o yaml > ~/labs/sre-labs-portfolio/03-pods-stuck-pending/02-troubleshoot/deployment-before-fix.yaml && echo backup-ok
+# 2026-11-05 20:40:26
+backup-ok
+
+$ kubectl set resources deployment/checkout-api -n lab03 -c api --requests=cpu=100m --limits=cpu=500m
+# 2026-11-05 20:42:01
+deployment.apps/checkout-api resource requirements updated
+
+$ kubectl rollout status deployment/checkout-api -n lab03 --timeout=180s
+# 2026-11-05 20:42:01
+Waiting for deployment "checkout-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-api" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "checkout-api" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "checkout-api" rollout to finish: 1 old replicas are pending termination...
+deployment "checkout-api" successfully rolled out
+
+$ date "+%F %T" | tee ~/labs/sre-labs-portfolio/03-pods-stuck-pending/02-troubleshoot/incident-end.txt
+# 2026-11-05 20:42:06
+2026-11-05 20:42:06
+
+$ kubectl get deploy,rs,pods -n lab03 -o wide
+# 2026-11-05 20:42:06
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES              SELECTOR
+deployment.apps/checkout-api   3/3     3            3           23m   api          nginx:1.27-alpine   app=checkout-api
+
+NAME                                      DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES              SELECTOR
+replicaset.apps/checkout-api-55b477bfcc   0         0         0       23m   api          nginx:1.27-alpine   app=checkout-api,pod-template-hash=55b477bfcc
+replicaset.apps/checkout-api-6db5c89985   3         3         3       5s    api          nginx:1.27-alpine   app=checkout-api,pod-template-hash=6db5c89985
+
+NAME                                READY   STATUS        RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+pod/checkout-api-55b477bfcc-7x6jd   1/1     Terminating   0          23m   10.244.0.20   minikube   <none>           <none>
+pod/checkout-api-6db5c89985-f9shh   1/1     Running       0          5s    10.244.0.21   minikube   <none>           <none>
+pod/checkout-api-6db5c89985-h5hxr   1/1     Running       0          2s    10.244.0.23   minikube   <none>           <none>
+pod/checkout-api-6db5c89985-zlvhx   1/1     Running       0          4s    10.244.0.22   minikube   <none>           <none>
+
+$ kubectl describe node minikube | sed -n "/^Allocated resources:/,/^Events:/p"
+# 2026-11-05 20:42:06
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                2550m (63%)  3 (75%)
+  memory             682Mi (4%)   1194Mi (7%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:

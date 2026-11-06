@@ -1,0 +1,13 @@
+
+$ bash ~/labs/sre-labs-portfolio/03-pods-stuck-pending/04-verify/verify.sh
+# 2026-11-05 20:43:49
+[PASS] Deployment reports 3 ready replicas
+[PASS] No pod is in Pending
+[PASS] Exactly 3 pods exist (old pod fully terminated)
+[PASS] Rollout is complete
+[PASS] CPU request per replica is 100m
+[PASS] Node CPU reserved is below 80%
+[PASS] No container restarts
+[PASS] Application answers HTTP inside the pod
+
+Result: 8 passed, 0 failed

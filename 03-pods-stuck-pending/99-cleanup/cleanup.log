@@ -1,0 +1,35 @@
+
+$ ls -l ~/labs/sre-labs-portfolio/03-pods-stuck-pending/04-verify/
+# 2026-11-05 21:08:09
+total 8
+-rw-rw-r-- 1 gerardo gerardo  432 nov  5 20:43 verify.log
+-rwxrwxr-x 1 gerardo gerardo 1946 nov  5 20:43 verify.sh
+
+$ bash ~/labs/sre-labs-portfolio/03-pods-stuck-pending/99-cleanup/cleanup.sh
+# 2026-11-05 21:08:09
+== Deleting namespace lab03 ==
+namespace "lab03" deleted
+
+== Namespaces left in the cluster ==
+NAME              STATUS   AGE
+default           Active   15d
+kube-node-lease   Active   15d
+kube-public       Active   15d
+kube-system       Active   15d
+
+== Stopping Minikube ==
+* Stopping node "minikube"  ...
+* Powering off "minikube" via SSH ...
+* 1 node stopped.
+
+== Final state ==
+minikube
+type: Control Plane
+host: Stopped
+kubelet: Stopped
+apiserver: Stopped
+kubeconfig: Stopped
+
+NAMES     STATUS
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       2.1Gi        10Gi       146Mi       3.9Gi        13Gi
